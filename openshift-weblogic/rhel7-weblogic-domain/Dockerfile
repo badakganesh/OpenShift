@@ -23,7 +23,7 @@
 #
 #
 FROM rhel7-weblogic-admin
-MAINTAINER Johnathan Kupferer <jkupfere@redhat.com>
+MAINTAINER Kalidask
 
 # WLS Configuration (editable during runtime)
 # ---------------------------
