@@ -22,12 +22,12 @@
 # PRODUCTION_MODE - Default prod
 #
 #
-FROM rhel7-weblogic
+FROM rhel7-weblogic-admin
 MAINTAINER Johnathan Kupferer <jkupfere@redhat.com>
 
 # WLS Configuration (editable during runtime)
 # ---------------------------
-ENV ADMIN_HOST="wlsadmin" \
+ENV ADMIN_HOST="localhost" \
     NM_PORT="5556" \
     MS_PORT="7001" \
     DEBUG_PORT="8453" \
@@ -48,9 +48,11 @@ USER oracle
 COPY container-scripts/* /u01/oracle/
 
 # Configuration of WLS Domain
-RUN export ADMIN_PASSWORD=$(if [ -z "$ADMIN_PASSWORD" ]; then dd if=/dev/urandom bs=15 count=1 2>/dev/null | base64 -w 0; else echo "$ADMIN_PASSWORD"; fi) && \
-    /u01/oracle/wlst /u01/oracle/create-wls-domain.py && \
-    echo password= >> /u01/oracle/user_projects/domains/$DOMAIN_NAME/servers/AdminServer/security/boot.properties && \
+#RUN export ADMIN_PASSWORD=$(if [ -z "$ADMIN_PASSWORD" ]; then dd if=/dev/urandom bs=15 count=1 2>/dev/null | base64 -w 0; else echo "$ADMIN_PASSWORD"; fi) && \
+ENV ADMIN_PASSWORD=redhat@1
+
+RUN    /u01/oracle/wlst /u01/oracle/create-wls-domain.py && \
+   # echo password= >> /u01/oracle/user_projects/domains/$DOMAIN_NAME/servers/AdminServer/security/boot.properties && \
     mkdir -p /u01/oracle/user_projects/domains/$DOMAIN_NAME/servers/AdminServer/security && \
     echo "username=weblogic" > /u01/oracle/user_projects/domains/$DOMAIN_NAME/servers/AdminServer/security/boot.properties && \ 
     echo "password=$ADMIN_PASSWORD" >> /u01/oracle/user_projects/domains/$DOMAIN_NAME/servers/AdminServer/security/boot.properties && \

@@ -36,17 +36,20 @@
 # ---------
 # The resulting image of this Dockerfile contains a WLS Empty Domain.
 #
-FROM rhel7-java-180-oracle
+FROM registry.access.redhat.com/rhel7
 MAINTAINER Johnathan Kupferer <jkupfere@redhat.com>
 
 # WLS Configuration (editable during build time)
 # ------------------------------
-ARG ADMIN_PASSWORD
+ARG ADMIN_PASSWORD=redhat@1
+ENV FMW_VERSION=12.2.1.3.0
+    JAVA_RPM=jdk-8u171-linux-x64.rpm
+    JAVA_HOME=/usr/java/default
 
 # Environment variables required for this build (do NOT change)
 # -------------------------------------------------------------
-ENV FMW_PKG=fmw_${FMW_VERSION}_wls${FMW_QUICK:+_quick}_Disk1_1of1.zip \
-    FMW_JAR=fmw_${FMW_VERSION}_wls${FMW_QUICK:+_quick}.jar \
+ENV FMW_PKG=fmw_${FMW_VERSION}_wls_Disk1_1of1.zip \
+    FMW_JAR=fmw_${FMW_VERSION}_wls.jar \
     SCRIPT_FILE=/u01/oracle/createAndStartEmptyDomain.sh \
     ORACLE_HOME=/u01/oracle \
     USER_MEM_ARGS="-Djava.security.egd=file:/dev/./urandom" \
@@ -62,6 +65,13 @@ ENV FMW_PKG=fmw_${FMW_VERSION}_wls${FMW_QUICK:+_quick}_Disk1_1of1.zip \
 ADD ${FMW_BASEURL}${FMW_PKG} /u01/
 COPY install.file oraInst.loc /u01/
 COPY container-scripts/createAndStartEmptyDomain.sh container-scripts/create-wls-domain.py /u01/oracle/
+COPY ${JAVA_RPM} /u01/
+
+
+# install JAVA
+#--------------
+RUN rpm -i /u01/${JAVA_RPM}
+
 
 # Setup filesystem and oracle user
 # Install and configure Oracle JDK
