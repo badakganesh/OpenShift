@@ -37,7 +37,7 @@
 # The resulting image of this Dockerfile contains a WLS Empty Domain.
 #
 FROM registry.access.redhat.com/rhel7
-MAINTAINER Johnathan Kupferer <jkupfere@redhat.com>
+MAINTAINER Kalidask
 
 # WLS Configuration (editable during build time)
 # ------------------------------
@@ -62,7 +62,7 @@ ENV FMW_PKG=fmw_${FMW_VERSION}_wls_Disk1_1of1.zip \
 
 # Copy packages
 # -------------
-ADD ${FMW_BASEURL}${FMW_PKG} /u01/
+COPY ${FMW_PKG} /u01/
 COPY install.file oraInst.loc /u01/
 COPY container-scripts/createAndStartEmptyDomain.sh container-scripts/create-wls-domain.py /u01/oracle/
 COPY ${JAVA_RPM} /u01/
