@@ -40,8 +40,8 @@ MAINTAINER Kalidask
 # WLS Configuration (editable during build time)
 # ------------------------------
 ARG ADMIN_PASSWORD=redhat@1
-ENV FMW_VERSION=12.2.1.3.0
-    JAVA_RPM=jdk-8u171-linux-x64.rpm
+ENV FMW_VERSION=12.2.1.3.0 \
+    JAVA_RPM=jdk-8u171-linux-x64.rpm \
     JAVA_HOME=/usr/java/default
 
 # Environment variables required for this build (do NOT change)

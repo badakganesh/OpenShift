@@ -30,5 +30,5 @@ ENV APP_NAME=${APP_NAME:-sample} \
 COPY container-scripts/* /u01/oracle/
 
 USER oracle
-RUN wlst /u01/oracle/app-deploy.py && \
-    find /u01 -user oracle -exec chmod a+rwX /u01 {} ';'
+RUN wlst /u01/oracle/app-deploy.py 
+#    find /u01 -user oracle -exec chmod a+rwX /u01 {} ';'
